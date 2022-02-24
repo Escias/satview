@@ -26,18 +26,17 @@ class ApiSat {
     
     func getByName(name: String) {
         let urlSearch = URL(string: url + "?search=" + name)
-         requestWithUrl(url: urlSearch!) {results in
+        requestWithUrl(url: urlSearch!) {results in
             for item in results! {
                 let satellite = sat.init(name: item["name"] as! String, latitude: item["line1"] as! String, longitude: item["line2"] as! String, id: item["satelliteId"] as! Int)
                 print("nous sommes dedans")
-                print(satellite)
-                return satellite
+                //return satellite
             }
-            return nil
+            //return nil
         }
     }
     
-    public func requestWithUrl(url: URL, completion: @escaping ([[String: AnyObject]]?) -> (sat?) ) {
+    public func requestWithUrl(url: URL, completion: @escaping ([[String: AnyObject]]?) -> () ) {
         let satInfos: [[String: AnyObject]]? = nil
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil {
