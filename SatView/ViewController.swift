@@ -8,10 +8,14 @@
 import UIKit
 
 class ViewController: UIViewController {
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        let test = ApiSat.apiSat.getByName(name: "HST")
+        print("nous sommes maintenant ici : ")
+        print(test)
     }
 
 
