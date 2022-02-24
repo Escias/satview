@@ -16,7 +16,15 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.mapView.mapType = MKMapType.hybrid
+        self.mapView.mapType = .hybridFlyover
+        
+        let satellite = Satellite(
+          id: "20580",
+          name: "HST",
+          altitude: "535.6591127323209",
+          coordinate: CLLocationCoordinate2D(latitude: 25.402713599913692, longitude: 5.180406219949209))
+        mapView.addAnnotation(satellite)
+        
         // Do any additional setup after loading the view.
     }
 
