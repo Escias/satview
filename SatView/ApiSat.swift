@@ -9,7 +9,7 @@ import UIKit
 import MapKit
 
 class ApiSat {
-
+    
     /*struct sat {
            
             let name: String
@@ -22,27 +22,36 @@ class ApiSat {
     
     public static let apiSat = ApiSat()
     
+    
     private init() {}
     
-    func getByName(name: String) {
-        var urlSearch = URL(string: url + "?search=" + name)
-        requestWithUrl(url: urlSearch!) {results in
+    func getByName(name: String) -> ([String: AnyObject]) {
+        let urlSearch = URL(string: url + "?search=" + name)
+        var resultsReq2: [String: AnyObject] = [:]
+        getSatelites(url: urlSearch!) {results in
             for item in results! {
-                //var coordinates = CLLocationCoordinate2D(latitude: item["line1"] as! Double, longitude: item["line2"] as! Double)
-                //print(type(of: item["satelliteId"]))
-                print("on entre une première fois")
-                let id = String(describing: item["satelliteId"])
-                urlSearch = URL(string: self.url + "/" + id + "/propagate")
-                self.requestWithUrl(url: urlSearch!) { results in
-                    print("C'est ici ue ça e passe : " + String(describing: results))
+                let id = item["satelliteId"]!
+                let urlSearch = URL(string: self.url + "/" + String(describing: id) + "/propagate")!
+                self.getSateliteData(url: urlSearch) { results in
+                    resultsReq2 = results
+                    let sat = self.createSat(data: results)
+                    ViewController.satellites.append(sat)
                 }
-                //return satellite
             }
-            //return nil
         }
+        return resultsReq2
     }
     
-    public func requestWithUrl(url: URL, completion: @escaping ([[String: AnyObject]]?) -> () ) {
+    public func createSat(data: [String: AnyObject]) -> (Satellite) {
+        let coordinates = CLLocationCoordinate2D(latitude: data["geodetic"]!["latitude"] as! Double, longitude: data["geodetic"]!["longitude"] as! Double)
+        let id = data["tle"]!["satelliteId"] as! Int
+        let name = data["tle"]!["name"] as! String
+        let altitude = data["geodetic"]!["altitude"] as! Double
+        let satellite = Satellite(id: id, name: name, altitude: altitude, coordinate: coordinates)
+        return satellite
+    }
+    
+    public func getSatelites(url: URL, completion: @escaping ([[String: AnyObject]]?) -> () ) {
         let satInfos: [[String: AnyObject]]? = nil
         let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
             if error != nil {
@@ -60,6 +69,24 @@ class ApiSat {
                 }
             }
         }
+        task.resume()
+    }
+    
+    public func getSateliteData(url: URL, completion: @escaping ([String: AnyObject]) -> ()) {
+        let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
+            if error != nil {
+                print(error!.localizedDescription)
+            } else {
+                if let json = try? JSONSerialization.jsonObject(with: data!, options: .mutableContainers) {
+                    if let data = json as? [String: AnyObject] {
+                        if let satInfos = data["geodetic"] as? [String: AnyObject] {
+                            completion(data)
+                        }
+                    }
+                }
+            }
+        }
+
         task.resume()
     }
 
