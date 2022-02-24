@@ -6,18 +6,18 @@
 //
 
 import UIKit
+import MapKit
 
 class ApiSat {
 
-    struct sat {
+    /*struct sat {
            
             let name: String
             let latitude: String
             let longitude: String
             let id: Int
             
-        }
-    
+        }*/
     let url = "https://tle.ivanstanojevic.me/api/tle"
     
     public static let apiSat = ApiSat()
@@ -25,11 +25,17 @@ class ApiSat {
     private init() {}
     
     func getByName(name: String) {
-        let urlSearch = URL(string: url + "?search=" + name)
+        var urlSearch = URL(string: url + "?search=" + name)
         requestWithUrl(url: urlSearch!) {results in
             for item in results! {
-                let satellite = sat.init(name: item["name"] as! String, latitude: item["line1"] as! String, longitude: item["line2"] as! String, id: item["satelliteId"] as! Int)
-                print("nous sommes dedans")
+                //var coordinates = CLLocationCoordinate2D(latitude: item["line1"] as! Double, longitude: item["line2"] as! Double)
+                //print(type(of: item["satelliteId"]))
+                print("on entre une première fois")
+                let id = String(describing: item["satelliteId"])
+                urlSearch = URL(string: self.url + "/" + id + "/propagate")
+                self.requestWithUrl(url: urlSearch!) { results in
+                    print("C'est ici ue ça e passe : " + String(describing: results))
+                }
                 //return satellite
             }
             //return nil

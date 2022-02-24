@@ -9,28 +9,35 @@ import UIKit
 import MapKit
 
 class ViewController: UIViewController {
-    @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var mapView: MKMapView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.mapView.mapType = MKMapType.hybrid
+        
+        self.mapView.mapType = MKMapType.hybridFlyover
+                
+                let satellite = Satellite(
+                  id: "20580",
+                  name: "HST",
+                  altitude: "535.6591127323209",
+                  coordinate: CLLocationCoordinate2D(latitude: 25.402713599913692, longitude: 5.180406219949209))
+                mapView.addAnnotation(satellite)
+        
 
-        var satellite: ApiSat.sat! = nil
-        let url = URL(string: "https://tle.ivanstanojevic.me/api/tle?search=HST")
-        ApiSat.apiSat.requestWithUrl(url: url!) {results in
+        /*ApiSat.apiSat.requestWithUrl(url: url!) {results in
             //print(results)
             for item in results! {
-                satellite = ApiSat.sat.init(name: item["name"] as! String, latitude: item["line1"] as! String, longitude: item["line2"] as! String, id: item["satelliteId"] as! Int)
+                sate = ApiSat.sat.init(name: item["name"] as! String, latitude: item["line1"] as! String, longitude: item["line2"] as! String, id: item["satelliteId"] as! Int)
                 print("nous sommes dedans")
-                print(satellite)
+                print(sate)
             }
-        }
+        }*/
+        ApiSat.apiSat.getByName(name: "HST")
     }
 
 }
 
-    private extension MKMapView {
+    /*private extension MKMapView {
         func centerToLocation(
           _ location: CLLocation,
           regionRadius: CLLocationDistance = 1000
@@ -41,4 +48,4 @@ class ViewController: UIViewController {
             longitudinalMeters: regionRadius)
           setRegion(coordinateRegion, animated: true)
         }
-    }
+    }*/
