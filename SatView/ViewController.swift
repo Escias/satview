@@ -9,21 +9,9 @@ import UIKit
 import MapKit
 
 class ViewController: UIViewController {
+
     @IBOutlet weak var mapView: MKMapView!
-    
-    static var satellites = [Satellite]() {
-        willSet(newSat) {
-            print(newSat)
-            self.addSatellite(newSat)
-            //self.mapView.addAnnotation(newSat as! MKAnnotation)
-            print("On entre dans le willset")
-            print(satellites)
-        }
-        didSet {
-            print("on entre dans le didset")
-            print(satellites)
-        }
-    }
+    @IBOutlet weak var buttonImage: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,9 +39,10 @@ class ViewController: UIViewController {
         
     }
     
-    func addSatellite(satellite: [Satellite]) {
-        self.mapView.mapType = MKMapType.hybridFlyover
-        mapView.addAnnotation(satellite[0])
+    @IBAction func buttonImage(_ sender: Any) {
+        if let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Table") as? ImageCollection {
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
     }
 
 }

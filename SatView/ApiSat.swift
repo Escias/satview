@@ -35,7 +35,7 @@ class ApiSat {
                 self.getSateliteData(url: urlSearch) { results in
                     resultsReq2 = results
                     let sat = self.createSat(data: results)
-                    ViewController.satellites.append(sat)
+                    //ViewController.satellites.append(sat)
                 }
             }
         }

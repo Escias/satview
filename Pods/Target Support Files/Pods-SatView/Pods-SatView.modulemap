@@ -1,0 +1,6 @@
+framework module Pods_SatView {
+  umbrella header "Pods-SatView-umbrella.h"
+
+  export *
+  module * { export * }
+}
