@@ -11,10 +11,7 @@ import MapKit
 class ViewController: UIViewController {
     
     @IBOutlet weak var mapView: MKMapView!
-    @IBOutlet var searchview: UISearchBar!
-    
-    var filterdata:[String]!
-    
+
     let apiSat: ApiSat = ApiSat()
     var timer = Timer()
     override func viewDidLoad() {
